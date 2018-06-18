@@ -1,0 +1,11 @@
+add_executable(test_cudaGetDevice test_cudaGetDevice.F90)
+target_link_libraries(test_cudaGetDevice fcuda)
+add_test(cudaGetDevice test_cudaGetDevice)
+
+add_executable(test_cudaMalloc test_cudaMalloc.F90)
+target_link_libraries(test_cudaMalloc fcuda)
+add_test(cudaMalloc test_cudaMalloc)
+
+add_executable(test_array_add vectorAddGPU.cu test_array_add.F90)
+target_link_libraries(test_array_add fcuda)
+add_test(array_add test_array_add)
