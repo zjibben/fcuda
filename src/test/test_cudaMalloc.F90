@@ -13,20 +13,17 @@ program test_cudaMalloc
 
   nbytes = int(N*(storage_size(aH)/8), int64)
 
-  call fcudaMalloc(aD, nbytes, ierr)
-  ASSERT(ierr==0)
+  call fcudaMalloc(aD, nbytes, ierr); ASSERT(ierr==0)
 
   aH = 1
-  call fcudaMemcpy(aD, aH, nbytes, cudaMemcpyHostToDevice, ierr)
-  ASSERT(ierr==0)
+  call fcudaMemcpy(aD, aH, nbytes, cudaMemcpyHostToDevice, ierr); ASSERT(ierr==0)
 
   aH = 0
 
-  call fcudaMemcpy(aH, aD, nbytes, cudaMemcpyDeviceToHost, ierr)
-  ASSERT(ierr==0)
+  call fcudaMemcpy(aH, aD, nbytes, cudaMemcpyDeviceToHost, ierr); ASSERT(ierr==0)
 
-  call fcudaFree(aD, ierr)
-  ASSERT(ierr==0)
+  call fcudaFree(aD, ierr); ASSERT(ierr==0)
+  call fcudaDeviceReset(ierr); ASSERT(ierr==0)
 
   ! check what came back
   if (any(aH /= 1)) ierr = 1

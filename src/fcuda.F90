@@ -14,6 +14,7 @@ module fcuda
   public :: fcudaGetDevice
   public :: fcudaGetDeviceCount
   public :: fcudaGetDeviceProperties
+  public :: fcudaDeviceReset
 
   public :: fcudaMalloc
   public :: fcudaFree
@@ -50,6 +51,11 @@ contains
     integer, intent(out) :: ierr
     ierr = cudaGetDeviceProperties(prop, device)
   end subroutine fcudaGetDeviceProperties
+
+  subroutine fcudaDeviceReset(ierr)
+    integer, intent(out) :: ierr
+    ierr = cudaDeviceReset()
+  end subroutine fcudaDeviceReset
 
   !! malloc
   subroutine fcudaMalloc(devPtr, size, ierr)

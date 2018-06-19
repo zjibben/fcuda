@@ -59,6 +59,7 @@ program test_array_add
   call fcudaFree(aD, ierr); ASSERT(ierr==0)
   call fcudaFree(bD, ierr); ASSERT(ierr==0)
   call fcudaFree(cD, ierr); ASSERT(ierr==0)
+  call fcudaDeviceReset(ierr); ASSERT(ierr==0)
 
   !! check what came back
   print *, 'max error: ', maxval(abs(cH - (aH + bH))), any(cH /= aH + bH)
