@@ -1,3 +1,7 @@
+add_executable(test_assumptions test_assumptions.cu)
+target_link_libraries(test_assumptions fcuda)
+add_test(assumptions test_assumptions)
+
 add_executable(test_cudaGetDevice test_cudaGetDevice.F90)
 target_link_libraries(test_cudaGetDevice fcuda)
 add_test(cudaGetDevice test_cudaGetDevice)
