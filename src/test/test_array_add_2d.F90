@@ -19,7 +19,7 @@ module array_add_kernel
 
 end module array_add_kernel
 
-program test_array_add
+program test_array_add_2d
 
   use fcuda
   use array_add_kernel
@@ -27,11 +27,11 @@ program test_array_add
   use,intrinsic :: iso_fortran_env, only: r8 => real64
   implicit none
 
-  integer, parameter :: N = 2053
+  integer, parameter :: N = 50
   integer, parameter :: BLOCK_SIZE = 512
   integer :: ierr, grid_size
   integer(int64) :: nbytes
-  real(r8) :: aH(N), bH(N), cH(N)
+  real(r8) :: aH(N,N), bH(N,N), cH(N,N)
   type(fcuda_dev_ptr) :: aD, bD, cD
 
   !! generate test data
@@ -39,7 +39,7 @@ program test_array_add
   call random_number(bH)
 
   !! allocate GPU memory and copy to the GPU
-  nbytes = int(N*(storage_size(aH)/8), int64)
+  nbytes = int(N*N*(storage_size(aH)/8), int64)
 
   call fcudaMalloc(aD, nbytes, ierr); ASSERT(ierr==0)
   call fcudaMalloc(bD, nbytes, ierr); ASSERT(ierr==0)
@@ -49,8 +49,8 @@ program test_array_add
   call fcudaMemcpy(bD, bH, nbytes, cudaMemcpyHostToDevice, ierr); ASSERT(ierr==0)
 
   !! run the kernel
-  grid_size = (N + BLOCK_SIZE - 1) / BLOCK_SIZE
-  call array_add(grid_size, BLOCK_SIZE, aD, bD, cD, N)
+  grid_size = (N*N + BLOCK_SIZE - 1) / BLOCK_SIZE
+  call array_add(grid_size, BLOCK_SIZE, aD, bD, cD, N*N)
 
   !! copy the result out
   call fcudaMemcpy(cH, cD, nbytes, cudaMemcpyDeviceToHost, ierr); ASSERT(ierr==0)
@@ -65,4 +65,4 @@ program test_array_add
   print *, 'max error: ', maxval(abs(cH - (aH + bH))), any(cH /= aH + bH)
   ASSERT(.not.any(cH /= aH + bH))
 
-end program test_array_add
+end program test_array_add_2d

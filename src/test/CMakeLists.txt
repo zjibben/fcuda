@@ -13,3 +13,7 @@ add_test(cudaMalloc test_cudaMalloc)
 add_executable(test_array_add vectorAddGPU.cu test_array_add.F90)
 target_link_libraries(test_array_add fcuda)
 add_test(array_add test_array_add)
+
+add_executable(test_array_add_2d vectorAddGPU.cu test_array_add_2d.F90)
+target_link_libraries(test_array_add_2d fcuda)
+add_test(array_add_2d test_array_add_2d)
