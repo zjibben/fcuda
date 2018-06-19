@@ -34,7 +34,7 @@ program test_array_add
   integer, parameter :: BLOCK_SIZE = 512
   integer :: ierr, grid_size
   integer(int64) :: nbytes
-  real(r8) :: aH(N), bH(N), cH(N), max_error
+  real(r8) :: aH(N), bH(N), cH(N)
   type(fcuda_dev_ptr) :: aD, bD, cD
 
   !! generate test data
@@ -64,8 +64,8 @@ program test_array_add
   call fcudaFree(cD, ierr); ASSERT(ierr==0)
 
   !! check what came back
-  max_error = maxval(abs(cH - (aH + bH)))
-  if (max_error > 0) ierr = 1
+  print *, 'max error: ', maxval(abs(cH - (aH + bH)))
+  if (any(cH /= aH + bH)) ierr = 1
 
   call exit(ierr)
 
