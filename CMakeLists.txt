@@ -3,13 +3,14 @@ cmake_minimum_required(VERSION 3.5)
 project(fcuda Fortran C CXX CUDA)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(BUILD_SHARED_LIBS ON)
 
 option(ENABLE_TESTS "Build test programs" ON)
 if(ENABLE_TESTS)
   enable_testing()
 endif()
 
-find_package(CUDA)
+find_package(CUDA REQUIRED)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES Intel)
   add_definitions(-DNO_2008_LHS_POLY_REALLOC)
