@@ -84,27 +84,33 @@ module cuda_c_binding
   public :: cudaGetDevice
   public :: cudaGetDeviceCount
   public :: cudaGetDeviceProperties
+  public :: cudaDeviceReset
 
   interface
     function cudaGetDevice(device) &
-        result(ierr) bind(c, name="ext_cudaGetDevice")
+        result(ierr) bind(c, name="cudaGetDevice")
       import c_int
       integer(c_int), intent(out) :: device
       integer(c_int) :: ierr
     end function cudaGetDevice
     function cudaGetDeviceCount(ndevices) &
-        result(ierr) bind(c, name="ext_cudaGetDeviceCount")
+        result(ierr) bind(c, name="cudaGetDeviceCount")
       import c_int
       integer(c_int), intent(out) :: ndevices
       integer(c_int) :: ierr
     end function cudaGetDeviceCount
     function cudaGetDeviceProperties(prop, device) &
-        result(ierr) bind(c, name="ext_cudaGetDeviceProperties")
+        result(ierr) bind(c, name="cudaGetDeviceProperties")
       import c_int, cudaDeviceProp
       type(cudaDeviceProp), intent(out) :: prop
       integer(c_int), intent(in), value :: device
       integer(c_int) :: ierr
     end function cudaGetDeviceProperties
+    function cudaDeviceReset() &
+        result(ierr) bind(c, name="cudaDeviceReset")
+      import c_int
+      integer(c_int) :: ierr
+    end function cudaDeviceReset
   end interface
 
   !! CUDA Malloc
@@ -113,14 +119,14 @@ module cuda_c_binding
 
   interface
     function cudaMalloc(devPtr, size) &
-        result(ierr) bind(c, name="ext_cudaMalloc")
+        result(ierr) bind(c, name="cudaMalloc")
       import c_ptr, c_size_t, c_int
       type(c_ptr) :: devPtr
       integer(c_size_t), value :: size
       integer(c_int) :: ierr
     end function cudaMalloc
     function cudaFree(devPtr) &
-        result(ierr) bind(c, name="ext_cudaFree")
+        result(ierr) bind(c, name="cudaFree")
       import c_ptr, c_size_t, c_int
       type(c_ptr), value :: devPtr
       integer(c_int) :: ierr
@@ -143,12 +149,13 @@ module cuda_c_binding
 
   interface
     function cudaMemcpy(dst, src, count, kind) &
-        result(ierr) bind(c, name="ext_cudaMemcpy")
+        result(ierr) bind(c, name="cudaMemcpy")
       import c_ptr, c_size_t, c_int
       type(c_ptr), value :: dst
       type(c_ptr), intent(in), value :: src
       integer(c_size_t), value :: count
       integer(c_int), value :: kind
+      integer(c_int) :: ierr
     end function cudaMemcpy
   end interface
 
