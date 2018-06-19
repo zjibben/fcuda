@@ -3,9 +3,6 @@
 program test_cudaGetDevice
 
   use fcuda
-#ifdef NAGFOR
-  use,intrinsic :: f90_unix, only: exit
-#endif
   implicit none
 
   integer :: i, ndevices, ierr
@@ -26,6 +23,6 @@ program test_cudaGetDevice
     print *, "  Peak Memory Bandwidth (GB/s): ", 2*prop%memoryClockRate*(prop%memoryBusWidth/8)/1.0e6
   end do
 
-  call exit(ierr)
+  if (ierr /= 0) stop 1
 
 end program test_cudaGetDevice

@@ -25,9 +25,6 @@ program test_array_add
   use array_add_kernel
   use,intrinsic :: iso_fortran_env, only: int64
   use,intrinsic :: iso_fortran_env, only: r8 => real64
-#ifdef NAGFOR
-  use,intrinsic :: f90_unix, only: exit
-#endif
   implicit none
 
   integer, parameter :: N = 2053
@@ -64,9 +61,9 @@ program test_array_add
   call fcudaFree(cD, ierr); ASSERT(ierr==0)
 
   !! check what came back
-  print *, 'max error: ', maxval(abs(cH - (aH + bH)))
+  print *, 'max error: ', maxval(abs(cH - (aH + bH))), any(cH /= aH + bH)
   if (any(cH /= aH + bH)) ierr = 1
 
-  call exit(ierr)
+  if (ierr /= 0) stop 1
 
 end program test_array_add

@@ -4,9 +4,6 @@ program test_cudaMalloc
 
   use fcuda
   use,intrinsic :: iso_fortran_env, only: int64
-#ifdef NAGFOR
-  use,intrinsic :: f90_unix, only: exit
-#endif
   implicit none
 
   integer, parameter :: N = 10
@@ -34,6 +31,6 @@ program test_cudaMalloc
   ! check what came back
   if (any(aH /= 1)) ierr = 1
 
-  call exit(ierr)
+  if (ierr /= 0) stop 1
 
 end program test_cudaMalloc

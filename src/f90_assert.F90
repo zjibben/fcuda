@@ -29,14 +29,11 @@
 subroutine f90_assert(file, line)
 
   use,intrinsic :: iso_fortran_env, only: error_unit
-#ifdef NAGFOR
-  use,intrinsic :: f90_unix, only: exit
-#endif
 
   character(*), intent(in) :: file
   integer,      intent(in) :: line
 
   write(error_unit,fmt='(a,i4.4)') 'Assertion failed at ' // file // ':', line
-  call exit(1)
+  stop 1
 
 end subroutine f90_assert
