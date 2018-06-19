@@ -7,6 +7,7 @@ module fcuda
   use,intrinsic :: iso_c_binding, only: fcuda_dev_ptr => c_ptr
   use cuda_c_binding
   use fcudaMemcpy_function
+  use fcuda_register_functions
   implicit none
   private
 
@@ -18,11 +19,15 @@ module fcuda
   public :: fcudaMalloc
   public :: fcudaFree
   public :: fcudaMemcpy
+  public :: fcudaHostRegister
+  public :: fcudaHostUnregister
 
   !! types
   public :: cudaDeviceProp, fcuda_dev_ptr
   public :: cudaMemcpyHostToHost, cudaMemcpyDeviceToDevice, cudaMemcpyDefault, &
       cudaMemcpyHostToDevice, cudaMemcpyDeviceToHost
+  public :: cudaHostRegisterDefault, cudaHostRegisterPortable, &
+      cudaHostRegisterMapped, cudaHostRegisterIoMemory
 
 contains
 

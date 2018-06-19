@@ -142,8 +142,8 @@ module cuda_c_binding
         cudaMemcpyDeviceToDevice = 3, &
         cudaMemcpyDefault        = 4
   end enum
-  public :: cudaMemcpyHostToHost, cudaMemcpyHostToDevice, cudaMemcpyDeviceToHost, &
-      cudaMemcpyDeviceToDevice, cudaMemcpyDefault
+  public :: cudaMemcpyHostToHost, cudaMemcpyHostToDevice, &
+      cudaMemcpyDeviceToHost, cudaMemcpyDeviceToDevice, cudaMemcpyDefault
 
   public :: cudaMemcpy
 
@@ -157,6 +157,37 @@ module cuda_c_binding
       integer(c_int), value :: kind
       integer(c_int) :: ierr
     end function cudaMemcpy
+  end interface
+
+  !! CUDA host register
+  enum, bind(c)
+    enumerator :: &
+        cudaHostRegisterDefault  = 0, &
+        cudaHostRegisterPortable = 1, &
+        cudaHostRegisterMapped   = 2, &
+        cudaHostRegisterIoMemory = 4
+  end enum
+  public :: cudaHostRegisterDefault, cudaHostRegisterPortable, &
+      cudaHostRegisterMapped, cudaHostRegisterIoMemory
+
+  public :: cudaHostRegister
+  public :: cudaHostUnregister
+
+  interface
+    function cudaHostRegister(ptr, size, flags) &
+        result(ierr) bind(c, name="cudaHostRegister")
+      import c_ptr, c_int, c_size_t
+      type(c_ptr), value :: ptr
+      integer(c_size_t), value :: size
+      integer(c_int), value :: flags
+      integer(c_int) :: ierr
+    end function cudaHostRegister
+    function cudaHostUnregister(ptr) &
+        result(ierr) bind(c, name="cudaHostUnregister")
+      import c_ptr, c_int
+      type(c_ptr), value :: ptr
+      integer(c_int) :: ierr
+    end function cudaHostUnregister
   end interface
 
 end module cuda_c_binding

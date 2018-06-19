@@ -10,6 +10,10 @@ add_executable(test_cudaMalloc test_cudaMalloc.F90)
 target_link_libraries(test_cudaMalloc fcuda)
 add_test(cudaMalloc test_cudaMalloc)
 
+add_executable(test_cudaHostRegister test_cudaHostRegister.F90)
+target_link_libraries(test_cudaHostRegister fcuda)
+add_test(cudaHostRegister test_cudaHostRegister)
+
 add_executable(test_array_add array_add.cu test_array_add.F90)
 target_link_libraries(test_array_add fcuda)
 add_test(array_add test_array_add)

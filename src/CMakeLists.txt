@@ -2,6 +2,7 @@ set(SRC
   f90_assert.F90
   cuda_c_binding.F90
   fcudaMemcpy_function.F90
+  fcuda_register_functions.F90
   fcuda.F90
 )
 
