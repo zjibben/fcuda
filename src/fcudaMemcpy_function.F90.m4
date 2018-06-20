@@ -15,7 +15,7 @@ dnl
 dnl
 define(`BASE_FUNCS', `dnl
   subroutine fcudaMemcpy_$3_dev(dst, src, count, kind, ierr)
-    $1, intent(out), target :: dst$2
+    $1, intent(out), contiguous, target :: dst$2
     type(fcuda_dev_ptr), intent(in) :: src
     integer(int64), intent(in) :: count
     integer, intent(in) :: kind
@@ -25,7 +25,7 @@ define(`BASE_FUNCS', `dnl
 
   subroutine fcudaMemcpy_dev_$3(dst, src, count, kind, ierr)
     type(fcuda_dev_ptr) :: dst
-    $1, intent(in), target :: src$2
+    $1, intent(in), contiguous, target :: src$2
     integer(int64), intent(in) :: count
     integer, intent(in) :: kind
     integer, intent(out) :: ierr
@@ -33,8 +33,8 @@ define(`BASE_FUNCS', `dnl
   end subroutine fcudaMemcpy_dev_$3
 
   subroutine fcudaMemcpy_$3_$3(dst, src, count, kind, ierr)
-    $1, intent(out), target :: dst$2
-    $1, intent(in), target :: src$2
+    $1, intent(out), contiguous, target :: dst$2
+    $1, intent(in), contiguous, target :: src$2
     integer(int64), intent(in) :: count
     integer, intent(in) :: kind
     integer, intent(out) :: ierr

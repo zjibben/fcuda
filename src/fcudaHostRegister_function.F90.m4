@@ -15,7 +15,7 @@ dnl
 dnl
 define(`BASE_FUNCS', `dnl
   subroutine fcudaHostRegister_$3(array, size, flags, ierr)
-    $1, intent(in), target :: array$2
+    $1, intent(in), contiguous, target :: array$2
     integer(int64), intent(in) :: size
     integer, intent(in) :: flags
     integer, intent(out) :: ierr
@@ -23,7 +23,7 @@ define(`BASE_FUNCS', `dnl
   end subroutine fcudaHostRegister_$3
 
   subroutine fcudaHostUnregister_$3(array, ierr)
-    $1, intent(in), target :: array$2
+    $1, intent(in), contiguous, target :: array$2
     integer, intent(out) :: ierr
     ierr = cudaHostUnregister(c_loc(array))
   end subroutine fcudaHostUnregister_$3')dnl
