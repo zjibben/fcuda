@@ -6,6 +6,13 @@ set(SRC
   fcuda.F90
 )
 
+# fcudaMemcpy_function.F90 is generated via m4
+add_custom_command(OUTPUT fcudaMemcpy_function.F90
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/fcudaMemcpy_function.F90.m4 ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND m4 fcudaMemcpy_function.F90.m4 > fcudaMemcpy_function.F90
+  MAIN_DEPENDENCY fcudaMemcpy_function.F90.m4
+)
+
 add_library(fcuda ${SRC})
 
 set(LIB_MOD_DIR ${CMAKE_CURRENT_BINARY_DIR}/mod_files/)
