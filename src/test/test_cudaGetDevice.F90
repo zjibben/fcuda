@@ -10,12 +10,12 @@ program test_cudaGetDevice
 
   call fcudaGetDeviceCount(ndevices, ierr)
 
-  ASSERT(ierr==0)
+  INSIST(ierr==0)
   print *, "Number of devices: ", ndevices
 
   do i = 0, ndevices-1
     call fcudaGetDeviceProperties(prop, i, ierr)
-    ASSERT(ierr==0)
+    INSIST(ierr==0)
     print *, "Device number: ", i
     print *, "  Device name: ", prop%name(:16)
     print *, "  Memory Clock Rate (Khz): ", prop%memoryClockRate
@@ -23,6 +23,6 @@ program test_cudaGetDevice
     print *, "  Peak Memory Bandwidth (GB/s): ", 2*prop%memoryClockRate*(prop%memoryBusWidth/8)/1.0e6
   end do
 
-  if (ierr /= 0) stop 1
+  INSIST(ierr == 0)
 
 end program test_cudaGetDevice

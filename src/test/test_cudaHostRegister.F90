@@ -14,7 +14,7 @@ program test_cudaHostRegister
   allocate(a(N))
 
   nbytes = int(N*(storage_size(a)/8), int64)
-  call fcudaHostRegister(a, nbytes, cudaHostRegisterDefault, ierr); ASSERT(ierr == 0)
-  call fcudaHostUnregister(a, ierr); ASSERT(ierr == 0)
+  call fcudaHostRegister(a, nbytes, cudaHostRegisterDefault, ierr); INSIST(ierr == 0)
+  call fcudaHostUnregister(a, ierr); INSIST(ierr == 0)
 
 end program test_cudaHostRegister

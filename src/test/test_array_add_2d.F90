@@ -41,28 +41,28 @@ program test_array_add_2d
   !! allocate GPU memory and copy to the GPU
   nbytes = int(N*N*(storage_size(aH)/8), int64)
 
-  call fcudaMalloc(aD, nbytes, ierr); ASSERT(ierr==0)
-  call fcudaMalloc(bD, nbytes, ierr); ASSERT(ierr==0)
-  call fcudaMalloc(cD, nbytes, ierr); ASSERT(ierr==0)
+  call fcudaMalloc(aD, nbytes, ierr); INSIST(ierr==0)
+  call fcudaMalloc(bD, nbytes, ierr); INSIST(ierr==0)
+  call fcudaMalloc(cD, nbytes, ierr); INSIST(ierr==0)
 
-  call fcudaMemcpy(aD, aH, nbytes, cudaMemcpyHostToDevice, ierr); ASSERT(ierr==0)
-  call fcudaMemcpy(bD, bH, nbytes, cudaMemcpyHostToDevice, ierr); ASSERT(ierr==0)
+  call fcudaMemcpy(aD, aH, nbytes, cudaMemcpyHostToDevice, ierr); INSIST(ierr==0)
+  call fcudaMemcpy(bD, bH, nbytes, cudaMemcpyHostToDevice, ierr); INSIST(ierr==0)
 
   !! run the kernel
   grid_size = (N*N + BLOCK_SIZE - 1) / BLOCK_SIZE
   call array_add(grid_size, BLOCK_SIZE, aD, bD, cD, N*N)
 
   !! copy the result out
-  call fcudaMemcpy(cH, cD, nbytes, cudaMemcpyDeviceToHost, ierr); ASSERT(ierr==0)
+  call fcudaMemcpy(cH, cD, nbytes, cudaMemcpyDeviceToHost, ierr); INSIST(ierr==0)
 
   !! free up
-  call fcudaFree(aD, ierr); ASSERT(ierr==0)
-  call fcudaFree(bD, ierr); ASSERT(ierr==0)
-  call fcudaFree(cD, ierr); ASSERT(ierr==0)
-  call fcudaDeviceReset(ierr); ASSERT(ierr==0)
+  call fcudaFree(aD, ierr); INSIST(ierr==0)
+  call fcudaFree(bD, ierr); INSIST(ierr==0)
+  call fcudaFree(cD, ierr); INSIST(ierr==0)
+  call fcudaDeviceReset(ierr); INSIST(ierr==0)
 
   !! check what came back
   print *, 'max error: ', maxval(abs(cH - (aH + bH))), any(cH /= aH + bH)
-  ASSERT(.not.any(cH /= aH + bH))
+  INSIST(.not.any(cH /= aH + bH))
 
 end program test_array_add_2d
