@@ -5,8 +5,10 @@ module fcuda
   use,intrinsic :: iso_fortran_env, only: int64
   use,intrinsic :: iso_c_binding, only: c_ptr
   use,intrinsic :: iso_c_binding, only: fcuda_dev_ptr => c_ptr
+  use,intrinsic :: iso_c_binding, only: fcudaStream => c_ptr
   use cuda_c_binding
   use fcudaMemcpy_function
+  use fcudaMemcpyAsync_function
   use fcudaHostRegister_function
   implicit none
   private
@@ -15,15 +17,24 @@ module fcuda
   public :: fcudaGetDeviceCount
   public :: fcudaGetDeviceProperties
   public :: fcudaDeviceReset
+  public :: cudaDeviceSynchronize
+  public :: cudaGetLastError
 
   public :: fcudaMalloc
   public :: fcudaFree
   public :: fcudaMemcpy
+  public :: fcudaMemcpyAsync
   public :: fcudaHostRegister
   public :: fcudaHostUnregister
 
+  public :: fcudaStreamCreate
+  public :: fcudaStreamDestroy
+  public :: fcudaStreamSynchronize
+
   !! types
-  public :: cudaDeviceProp, fcuda_dev_ptr
+  public :: cudaDeviceProp
+  public :: fcuda_dev_ptr
+  public :: fcudaStream
   public :: cudaMemcpyHostToHost, cudaMemcpyDeviceToDevice, cudaMemcpyDefault, &
       cudaMemcpyHostToDevice, cudaMemcpyDeviceToHost
   public :: cudaHostRegisterDefault, cudaHostRegisterPortable, &
@@ -67,5 +78,24 @@ contains
     integer, intent(out) :: ierr
     ierr = cudaFree(devPtr)
   end subroutine fcudaFree
+
+  !! streams
+  subroutine fcudaStreamCreate(pstream, ierr)
+    type(fcudaStream), intent(out) :: pstream
+    integer, intent(out) :: ierr
+    ierr = cudaStreamCreate(pstream)
+  end subroutine fcudaStreamCreate
+
+  subroutine fcudaStreamDestroy(pstream, ierr)
+    type(fcudaStream), intent(inout) :: pstream
+    integer, intent(out) :: ierr
+    ierr = cudaStreamDestroy(pstream)
+  end subroutine fcudaStreamDestroy
+
+  subroutine fcudaStreamSynchronize(pstream, ierr)
+    type(fcudaStream), intent(in) :: pstream
+    integer, intent(out) :: ierr
+    ierr = cudaStreamSynchronize(pstream)
+  end subroutine fcudaStreamSynchronize
 
 end module fcuda

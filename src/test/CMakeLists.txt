@@ -21,3 +21,7 @@ add_test(array_add test_array_add)
 add_executable(test_array_add_2d array_add.cu test_array_add_2d.F90)
 target_link_libraries(test_array_add_2d fcuda)
 add_test(array_add_2d test_array_add_2d)
+
+add_executable(test_asynchronous_operations asynchronous_operations.cu test_asynchronous_operations.F90)
+target_link_libraries(test_asynchronous_operations fcuda)
+add_test(asynchronous_operations test_asynchronous_operations)

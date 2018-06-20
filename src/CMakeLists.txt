@@ -1,6 +1,7 @@
 # generate templated sources with m4
 set(M4_SRC
   fcudaMemcpy_function.F90
+  fcudaMemcpyAsync_function.F90
   fcudaHostRegister_function.F90
 )
 foreach(m4src ${M4_SRC})
@@ -15,8 +16,7 @@ endforeach(m4src)
 set(SRC
   f90_assert.F90
   cuda_c_binding.F90
-  fcudaMemcpy_function.F90
-  fcudaHostRegister_function.F90
+  ${M4_SRC}
   fcuda.F90
 )
 

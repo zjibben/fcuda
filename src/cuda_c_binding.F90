@@ -85,6 +85,8 @@ module cuda_c_binding
   public :: cudaGetDeviceCount
   public :: cudaGetDeviceProperties
   public :: cudaDeviceReset
+  public :: cudaDeviceSynchronize
+  public :: cudaGetLastError
 
   interface
     function cudaGetDevice(device) &
@@ -111,6 +113,16 @@ module cuda_c_binding
       import c_int
       integer(c_int) :: ierr
     end function cudaDeviceReset
+    function cudaDeviceSynchronize() &
+        result(ierr) bind(c, name="cudaDeviceSynchronize")
+      import c_int
+      integer(c_int) :: ierr
+    end function cudaDeviceSynchronize
+    function cudaGetLastError() &
+        result(ierr) bind(c, name="cudaGetLastError")
+      import c_int
+      integer(c_int) :: ierr
+    end function cudaGetLastError
   end interface
 
   !! CUDA Malloc
@@ -146,6 +158,7 @@ module cuda_c_binding
       cudaMemcpyDeviceToHost, cudaMemcpyDeviceToDevice, cudaMemcpyDefault
 
   public :: cudaMemcpy
+  public :: cudaMemcpyAsync
 
   interface
     function cudaMemcpy(dst, src, count, kind) &
@@ -157,6 +170,16 @@ module cuda_c_binding
       integer(c_int), value :: kind
       integer(c_int) :: ierr
     end function cudaMemcpy
+    function cudaMemcpyAsync(dst, src, count, kind, stream) &
+        result(ierr) bind(c, name="cudaMemcpyAsync")
+      import c_ptr, c_size_t, c_int
+      type(c_ptr), value :: dst
+      type(c_ptr), intent(in), value :: src
+      integer(c_size_t), value :: count
+      integer(c_int), value :: kind
+      type(c_ptr), value :: stream
+      integer(c_int) :: ierr
+    end function cudaMemcpyAsync
   end interface
 
   !! CUDA host register
@@ -188,6 +211,32 @@ module cuda_c_binding
       type(c_ptr), value :: ptr
       integer(c_int) :: ierr
     end function cudaHostUnregister
+  end interface
+
+  !! CUDA Streams
+  public :: cudaStreamCreate
+  public :: cudaStreamDestroy
+  public :: cudaStreamSynchronize
+
+  interface
+    function cudaStreamCreate(pstream) &
+        result(ierr) bind(c, name="cudaStreamCreate")
+      import c_ptr, c_int
+      type(c_ptr) :: pstream
+      integer(c_int) :: ierr
+    end function cudaStreamCreate
+    function cudaStreamDestroy(pstream) &
+        result(ierr) bind(c, name="cudaStreamDestroy")
+      import c_ptr, c_int
+      type(c_ptr), value :: pstream
+      integer(c_int) :: ierr
+    end function cudaStreamDestroy
+    function cudaStreamSynchronize(pstream) &
+        result(ierr) bind(c, name="cudaStreamSynchronize")
+      import c_ptr, c_int
+      type(c_ptr), value :: pstream
+      integer(c_int) :: ierr
+    end function cudaStreamSynchronize
   end interface
 
 end module cuda_c_binding

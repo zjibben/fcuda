@@ -4,8 +4,7 @@
 int main()
 {
   assert(sizeof(cudaError_t) == sizeof(int));
+  assert(sizeof(cudaStream_t) == sizeof(void*));
   assert(sizeof(long) == sizeof(size_t));
-  assert(sizeof(void*) == sizeof(cudaStream_t));
-
   return 0;
 }
