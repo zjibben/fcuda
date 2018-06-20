@@ -15,32 +15,42 @@ dnl
 dnl
 define(`BASE_FUNCS', `dnl
   subroutine fcudaMemcpyAsync_$3_dev(dst, src, count, kind, stream, ierr)
-    $1, intent(inout), contiguous, target :: dst$2
+    $1, intent(inout), target :: dst$2
     type(fcuda_dev_ptr), intent(in) :: src
     integer(int64), intent(in) :: count
     integer, intent(in) :: kind
     type(fcudaStream), intent(in) :: stream
     integer, intent(out) :: ierr
+#ifndef __GFORTRAN__
+    ASSERT(is_contiguous(dst))
+#endif
     ierr = cudaMemcpyAsync(c_loc(dst), src, count, kind, stream)
   end subroutine fcudaMemcpyAsync_$3_dev
 
   subroutine fcudaMemcpyAsync_dev_$3(dst, src, count, kind, stream, ierr)
     type(fcuda_dev_ptr) :: dst
-    $1, intent(in), contiguous, target :: src$2
+    $1, intent(in), target :: src$2
     integer(int64), intent(in) :: count
     integer, intent(in) :: kind
     type(fcudaStream), intent(in) :: stream
     integer, intent(out) :: ierr
+#ifndef __GFORTRAN__
+    ASSERT(is_contiguous(src))
+#endif
     ierr = cudaMemcpyAsync(dst, c_loc(src), count, kind, stream)
   end subroutine fcudaMemcpyAsync_dev_$3
 
   subroutine fcudaMemcpyAsync_$3_$3(dst, src, count, kind, stream, ierr)
-    $1, intent(inout), contiguous, target :: dst$2
-    $1, intent(in), contiguous, target :: src$2
+    $1, intent(inout), target :: dst$2
+    $1, intent(in), target :: src$2
     integer(int64), intent(in) :: count
     integer, intent(in) :: kind
     type(fcudaStream), intent(in) :: stream
     integer, intent(out) :: ierr
+#ifndef __GFORTRAN__
+    ASSERT(is_contiguous(dst))
+    ASSERT(is_contiguous(src))
+#endif
     ierr = cudaMemcpyAsync(c_loc(dst), c_loc(src), count, kind, stream)
   end subroutine fcudaMemcpyAsync_$3_$3')dnl
 dnl
@@ -53,6 +63,8 @@ BASE_FUNCS(`$1', `(:,:,:)', `$2x3')
 
 BASE_FUNCS(`$1', `(:,:,:,:)', `$2x4')')dnl
 dnl
+#include "f90_assert.fpp"
+
 module fcudaMemcpyAsync_function
 
   use,intrinsic :: iso_fortran_env, only: int64
@@ -64,8 +76,10 @@ module fcudaMemcpyAsync_function
   implicit none
   private
 
-  ! TODO: Errors are likely to occur if copy-in/copy-out is used
-  !       on non-contiguous arguments to fcudaMemcpyAsync.
+  ! WARN: Errors are likely to occur if copy-in/copy-out is used
+  !       on arguments to fcudaMemcpyAsync (e.g., non-contiguous
+  !       arrays). The is_contiguous f08 intrinsic should help
+  !       with this, but is not yet supported by gfortran.
 
   public :: fcudaMemcpyAsync
 
