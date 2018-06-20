@@ -7,7 +7,7 @@ module fcuda
   use,intrinsic :: iso_c_binding, only: fcuda_dev_ptr => c_ptr
   use cuda_c_binding
   use fcudaMemcpy_function
-  use fcuda_register_functions
+  use fcudaHostRegister_function
   implicit none
   private
 

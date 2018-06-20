@@ -1,16 +1,23 @@
+# generate templated sources with m4
+set(M4_SRC
+  fcudaMemcpy_function.F90
+  fcudaHostRegister_function.F90
+)
+foreach(m4src ${M4_SRC})
+  add_custom_command(OUTPUT ${m4src}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${m4src}.m4 ./
+    COMMAND m4 ${m4src}.m4 > ${m4src}
+    MAIN_DEPENDENCY ${m4src}.m4
+  )
+endforeach(m4src)
+
+# build library
 set(SRC
   f90_assert.F90
   cuda_c_binding.F90
   fcudaMemcpy_function.F90
-  fcuda_register_functions.F90
+  fcudaHostRegister_function.F90
   fcuda.F90
-)
-
-# fcudaMemcpy_function.F90 is generated via m4
-add_custom_command(OUTPUT fcudaMemcpy_function.F90
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/fcudaMemcpy_function.F90.m4 ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND m4 fcudaMemcpy_function.F90.m4 > fcudaMemcpy_function.F90
-  MAIN_DEPENDENCY fcudaMemcpy_function.F90.m4
 )
 
 add_library(fcuda ${SRC})
