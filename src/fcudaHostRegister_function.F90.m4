@@ -1,42 +1,4 @@
-define(`MOD_PROCEDURE', `dnl
-    module procedure $1_$2x$3')dnl
-define(`MOD_PROCEDURE_ARR', `dnl
-MOD_PROCEDURE(`$1', `$2', `1')
-MOD_PROCEDURE(`$1', `$2', `2')
-MOD_PROCEDURE(`$1', `$2', `3')
-MOD_PROCEDURE(`$1', `$2', `4')')dnl
-define(`MOD_PROCEDURE_ARR_TYPES', `dnl
-MOD_PROCEDURE_ARR(`$1', `i4')
-
-MOD_PROCEDURE_ARR(`$1', `r4')
-
-MOD_PROCEDURE_ARR(`$1', `r8')')dnl
-dnl
-dnl
-define(`BASE_FUNCS', `dnl
-  subroutine fcudaHostRegister_$3(array, size, flags, ierr)
-    $1, intent(in), contiguous, target :: array$2
-    integer(int64), intent(in) :: size
-    integer, intent(in) :: flags
-    integer, intent(out) :: ierr
-    ierr = cudaHostRegister(c_loc(array), size, flags)
-  end subroutine fcudaHostRegister_$3
-
-  subroutine fcudaHostUnregister_$3(array, ierr)
-    $1, intent(in), contiguous, target :: array$2
-    integer, intent(out) :: ierr
-    ierr = cudaHostUnregister(c_loc(array))
-  end subroutine fcudaHostUnregister_$3')dnl
-dnl
-define(`BASE_FUNCS_ARR', `dnl
-BASE_FUNCS(`$1', `(:)', `$2x1')
-
-BASE_FUNCS(`$1', `(:,:)', `$2x2')
-
-BASE_FUNCS(`$1', `(:,:,:)', `$2x3')
-
-BASE_FUNCS(`$1', `(:,:,:,:)', `$2x4')')dnl
-dnl
+include(`replicator.m4')dnl
 module fcudaHostRegister_function
 
   use,intrinsic :: iso_fortran_env, only: int64
@@ -50,19 +12,31 @@ module fcudaHostRegister_function
   public :: fcudaHostUnregister
 
   interface fcudaHostRegister
-MOD_PROCEDURE_ARR_TYPES(`fcudaHostRegister')
+REPLICATE_INTERFACE_TYPE_DIM(`fcudaHostRegister')
   end interface fcudaHostRegister
 
   interface fcudaHostUnregister
-MOD_PROCEDURE_ARR_TYPES(`fcudaHostUnregister')
+REPLICATE_INTERFACE_TYPE_DIM(`fcudaHostUnregister')
   end interface fcudaHostUnregister
 
 contains
 
-BASE_FUNCS_ARR(`integer', `i4')
+define(`ROUTINE_INSTANCE', `dnl
+  subroutine fcudaHostRegister_$1(array, size, flags, ierr)
+    $2, intent(in), contiguous, target :: array$3
+    integer(int64), intent(in) :: size
+    integer, intent(in) :: flags
+    integer, intent(out) :: ierr
+    ierr = cudaHostRegister(c_loc(array), size, flags)
+  end subroutine fcudaHostRegister_$1')dnl
+REPLICATE_ROUTINE_TYPE_DIM()
 
-BASE_FUNCS_ARR(`real', `r4')
-
-BASE_FUNCS_ARR(`real(r8)', `r8')
+define(`ROUTINE_INSTANCE', `dnl
+  subroutine fcudaHostUnregister_$1(array, ierr)
+    $2, intent(in), contiguous, target :: array$3
+    integer, intent(out) :: ierr
+    ierr = cudaHostUnregister(c_loc(array))
+  end subroutine fcudaHostUnregister_$1')dnl
+REPLICATE_ROUTINE_TYPE_DIM()
 
 end module fcudaHostRegister_function

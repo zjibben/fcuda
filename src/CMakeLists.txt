@@ -1,4 +1,9 @@
 # generate templated sources with m4
+add_custom_command(OUTPUT replicator.m4
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/replicator.m4 ./
+  MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/replicator.m4
+)
+
 set(M4_SRC
   fcudaMemcpy_function.F90
   fcudaMemcpyAsync_function.F90
@@ -9,6 +14,7 @@ foreach(m4src ${M4_SRC})
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${m4src}.m4 ./
     COMMAND m4 ${m4src}.m4 > ${m4src}
     MAIN_DEPENDENCY ${m4src}.m4
+    DEPENDS replicator.m4
   )
 endforeach(m4src)
 
