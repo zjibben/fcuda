@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 project(fcuda Fortran C CXX CUDA)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/install)
 set(BUILD_SHARED_LIBS ON)
 
 option(ENABLE_TESTS "Build test programs" ON)

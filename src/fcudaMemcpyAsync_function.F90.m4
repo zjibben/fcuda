@@ -13,7 +13,8 @@ module fcudaMemcpyAsync_function
   ! WARN: Errors are likely to occur if copy-in/copy-out is used
   !       on arguments to fcudaMemcpyAsync (e.g., non-contiguous
   !       arrays). The is_contiguous f08 intrinsic should detect
-  !       this, but is not yet supported by gfortran.
+  !       this and trigger the call to return ierr = -1, but is
+  !       not yet supported by gfortran.
 
   public :: fcudaMemcpyAsync
 

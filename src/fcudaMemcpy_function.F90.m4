@@ -16,9 +16,15 @@ module fcudaMemcpy_function
 
 REPLICATE_INTERFACE_TYPE_DIM(`fcudaMemcpy_HtD')
 
+REPLICATE_INTERFACE_DIM(`fcudaMemcpy_HtD', `ptr')
+
 REPLICATE_INTERFACE_TYPE_DIM(`fcudaMemcpy_DtH')
 
+REPLICATE_INTERFACE_DIM(`fcudaMemcpy_DtH', `ptr')
+
 REPLICATE_INTERFACE_TYPE_DIM(`fcudaMemcpy_HtH')
+
+REPLICATE_INTERFACE_DIM(`fcudaMemcpy_HtH', `ptr')
   end interface fcudaMemcpy
 
 contains
@@ -43,6 +49,8 @@ define(`ROUTINE_INSTANCE', `dnl
   end subroutine fcudaMemcpy_DtH_$1')dnl
 REPLICATE_ROUTINE_TYPE_DIM()
 
+REPLICATE_ROUTINE_DIM(`ptr', `type(fcuda_dev_ptr)')
+
 define(`ROUTINE_INSTANCE', `dnl
   subroutine fcudaMemcpy_HtD_$1(dst, src, count, kind, ierr)
     type(fcuda_dev_ptr) :: dst
@@ -54,6 +62,8 @@ define(`ROUTINE_INSTANCE', `dnl
   end subroutine fcudaMemcpy_HtD_$1')dnl
 REPLICATE_ROUTINE_TYPE_DIM()
 
+REPLICATE_ROUTINE_DIM(`ptr', `type(fcuda_dev_ptr)')
+
 define(`ROUTINE_INSTANCE', `dnl
   subroutine fcudaMemcpy_HtH_$1(dst, src, count, kind, ierr)
     $2, intent(out), contiguous, target :: dst$3
@@ -64,5 +74,7 @@ define(`ROUTINE_INSTANCE', `dnl
     ierr = cudaMemcpy(c_loc(dst), c_loc(src), count, kind)
   end subroutine fcudaMemcpy_HtH_$1')dnl
 REPLICATE_ROUTINE_TYPE_DIM()
+
+REPLICATE_ROUTINE_DIM(`ptr', `type(fcuda_dev_ptr)')
 
 end module fcudaMemcpy_function
