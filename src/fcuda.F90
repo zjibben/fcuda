@@ -17,8 +17,8 @@ module fcuda
   public :: fcudaGetDeviceCount
   public :: fcudaGetDeviceProperties
   public :: fcudaDeviceReset
-  public :: cudaDeviceSynchronize
-  public :: cudaGetLastError
+  public :: fcudaDeviceSynchronize
+  public :: fcudaGetLastError
 
   public :: fcudaMalloc
   public :: fcudaFree
@@ -64,6 +64,16 @@ contains
     integer, intent(out) :: ierr
     ierr = cudaDeviceReset()
   end subroutine fcudaDeviceReset
+
+  subroutine fcudaDeviceSynchronize(ierr)
+    integer, intent(out) :: ierr
+    ierr = cudaDeviceSynchronize()
+  end subroutine fcudaDeviceSynchronize
+
+  subroutine fcudaGetLastError(ierr)
+    integer, intent(out) :: ierr
+    ierr = cudaGetLastError()
+  end subroutine fcudaGetLastError
 
   !! malloc
   subroutine fcudaMalloc(devPtr, size, ierr)
