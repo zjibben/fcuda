@@ -19,6 +19,9 @@ module fcuda
   public :: fcudaDeviceReset
   public :: fcudaDeviceSynchronize
   public :: fcudaGetLastError
+  public :: fcudaMemGetInfo
+  public :: fcudaDeviceGetLimit
+  public :: fcudaDeviceSetLimit
 
   public :: fcudaMalloc
   public :: fcudaFree
@@ -39,6 +42,8 @@ module fcuda
       cudaMemcpyHostToDevice, cudaMemcpyDeviceToHost
   public :: cudaHostRegisterDefault, cudaHostRegisterPortable, &
       cudaHostRegisterMapped, cudaHostRegisterIoMemory
+  public :: cudaLimitStackSize, cudaLimitPrintFifoSize, cudaLimitMallocHeapSize, &
+      cudaLimitDevRuntimeSyncDepth, cudaLimitDevRuntimePendingLaunchCount
 
 contains
 
@@ -74,6 +79,26 @@ contains
     integer, intent(out) :: ierr
     ierr = cudaGetLastError()
   end subroutine fcudaGetLastError
+
+  subroutine fcudaMemGetInfo(free, total, ierr)
+    integer(int64), intent(out) :: free, total
+    integer, intent(out) :: ierr
+    ierr = cudaMemGetInfo(free, total)
+  end subroutine fcudaMemGetInfo
+
+  subroutine fcudaDeviceGetLimit(pval, limit, ierr)
+    integer(int64), intent(out) :: pval
+    integer, intent(in) :: limit
+    integer, intent(out) :: ierr
+    ierr = cudaDeviceGetLimit(pval, limit)
+  end subroutine fcudaDeviceGetLimit
+
+  subroutine fcudaDeviceSetLimit(limit, pval, ierr)
+    integer, intent(in) :: limit
+    integer(int64), intent(in) :: pval
+    integer, intent(out) :: ierr
+    ierr = cudaDeviceSetLimit(limit, pval)
+  end subroutine fcudaDeviceSetLimit
 
   !! malloc
   subroutine fcudaMalloc(devPtr, size, ierr)

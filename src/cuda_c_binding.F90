@@ -87,6 +87,20 @@ module cuda_c_binding
   public :: cudaDeviceReset
   public :: cudaDeviceSynchronize
   public :: cudaGetLastError
+  public :: cudaMemGetInfo
+  public :: cudaDeviceGetLimit
+  public :: cudaDeviceSetLimit
+
+  enum, bind(c)
+    enumerator :: &
+        cudaLimitStackSize = 0, &
+        cudaLimitPrintFifoSize = 1, &
+        cudaLimitMallocHeapSize = 2, &
+        cudaLimitDevRuntimeSyncDepth = 3, &
+        cudaLimitDevRuntimePendingLaunchCount = 4
+  end enum
+  public :: cudaLimitStackSize, cudaLimitPrintFifoSize, cudaLimitMallocHeapSize, &
+      cudaLimitDevRuntimeSyncDepth, cudaLimitDevRuntimePendingLaunchCount
 
   interface
     function cudaGetDevice(device) &
@@ -123,6 +137,26 @@ module cuda_c_binding
       import c_int
       integer(c_int) :: ierr
     end function cudaGetLastError
+    function cudaMemGetInfo(free, total) &
+        result(ierr) bind(c, name="cudaMemGetInfo")
+      import c_int, c_size_t
+      integer(c_size_t) :: free, total
+      integer(c_int) :: ierr
+    end function cudaMemGetInfo
+    function cudaDeviceGetLimit(pval, limit) &
+        result(ierr) bind(c, name="cudaDeviceGetLimit")
+      import c_int, c_size_t
+      integer(c_size_t) :: pval
+      integer(c_int), value :: limit
+      integer(c_int) :: ierr
+    end function cudaDeviceGetLimit
+    function cudaDeviceSetLimit(limit, pval) &
+        result(ierr) bind(c, name="cudaDeviceSetLimit")
+      import c_int, c_size_t
+      integer(c_int), value :: limit
+      integer(c_size_t), value :: pval
+      integer(c_int) :: ierr
+    end function cudaDeviceSetLimit
   end interface
 
   !! CUDA Malloc
