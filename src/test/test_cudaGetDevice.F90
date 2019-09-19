@@ -9,7 +9,6 @@ program test_cudaGetDevice
   type(cudaDeviceProp) :: prop
 
   call fcudaGetDeviceCount(ndevices, ierr)
-
   INSIST(ierr==0)
   print *, "Number of devices: ", ndevices
 
@@ -22,7 +21,5 @@ program test_cudaGetDevice
     print *, "  Memory Bus Width (bits): ", prop%memoryBusWidth
     print *, "  Peak Memory Bandwidth (GB/s): ", 2*prop%memoryClockRate*(prop%memoryBusWidth/8)/1.0e6
   end do
-
-  INSIST(ierr == 0)
 
 end program test_cudaGetDevice

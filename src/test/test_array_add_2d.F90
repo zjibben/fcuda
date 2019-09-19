@@ -1,6 +1,6 @@
 #include "f90_assert.fpp"
 
-module array_add_kernel
+module array_add_kernel_2d
 
   use,intrinsic :: iso_c_binding, only: c_int, c_ptr
   implicit none
@@ -17,12 +17,12 @@ module array_add_kernel
     end subroutine array_add
   end interface
 
-end module array_add_kernel
+end module array_add_kernel_2d
 
 program test_array_add_2d
 
   use fcuda
-  use array_add_kernel
+  use array_add_kernel_2d
   use,intrinsic :: iso_fortran_env, only: int64
   use,intrinsic :: iso_fortran_env, only: r8 => real64
   implicit none
