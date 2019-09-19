@@ -5,8 +5,16 @@ module cuda_c_binding
   private
 
   !! CUDA Device Queries
+  !! From driver_types.h
+  type, bind(c), public :: cudaUUID_t
+    character(kind=c_char) :: bytes(16)
+  end type cudaUUID_t
+
   type, bind(c), public :: cudaDeviceProp
     character(kind=c_char) :: name(256)
+    type(cudaUUID_t) :: uuid
+    character(kind=c_char) :: luid(8)
+    integer(c_int) :: luidDeviceNodeMask ! This should be an unsigned int, but iso_c_bindings don't define one
     integer(c_size_t) :: totalGlobalMem
     integer(c_size_t) :: sharedMemPerBlock
     integer(c_int) :: regsPerBlock
