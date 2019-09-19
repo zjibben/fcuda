@@ -9,3 +9,9 @@ set(CMAKE_Fortran_FLAGS_DEBUG "-g ${CMAKE_Fortran_FLAGS}"
   CACHE STRING "Flags used by the compiler during debug builds")
 set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -DNDEBUG ${CMAKE_Fortran_FLAGS}"
   CACHE STRING "Fortran compile flags")
+
+# This line is needed to make nvcc compile with GCC 9.x.
+# Can't only apply this line if GCC 9.x is detected, because
+# this has to be set before CMake identifies compilers.
+set(CMAKE_CUDA_FLAGS "-U__GNUC__ -D__GNUC__=8 ${CMAKE_CUDA_FLAGS}" CACHE
+  STRING "CUDA compile flags")
