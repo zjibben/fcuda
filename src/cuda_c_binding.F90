@@ -98,6 +98,7 @@ module cuda_c_binding
   public :: cudaMemGetInfo
   public :: cudaDeviceGetLimit
   public :: cudaDeviceSetLimit
+  public :: cudaDeviceSetCacheConfig
 
   enum, bind(c)
     enumerator :: &
@@ -109,6 +110,16 @@ module cuda_c_binding
   end enum
   public :: cudaLimitStackSize, cudaLimitPrintFifoSize, cudaLimitMallocHeapSize, &
       cudaLimitDevRuntimeSyncDepth, cudaLimitDevRuntimePendingLaunchCount
+
+  enum, bind(c)
+    enumerator :: &
+        cudaFuncCachePreferNone = 0, &
+        cudaFuncCachePreferShared = 1, &
+        cudaFuncCachePreferL1 = 2, &
+        cudaFuncCachePreferEqual = 3
+  end enum
+  public :: cudaFuncCachePreferNone, cudaFuncCachePreferShared, cudaFuncCachePreferL1, &
+      cudaFuncCachePreferEqual
 
   interface
     function cudaGetDevice(device) &
@@ -140,6 +151,12 @@ module cuda_c_binding
       import c_int
       integer(c_int) :: ierr
     end function cudaDeviceSynchronize
+    function cudaDeviceSetCacheConfig(cache_config) &
+        result(ierr) bind(c, name="cudaGetDeviceProperties")
+      import c_int
+      integer(c_int), intent(in), value :: cache_config
+      integer(c_int) :: ierr
+    end function cudaDeviceSetCacheConfig
     function cudaGetLastError() &
         result(ierr) bind(c, name="cudaGetLastError")
       import c_int

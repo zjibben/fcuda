@@ -22,6 +22,7 @@ module fcuda
   public :: fcudaMemGetInfo
   public :: fcudaDeviceGetLimit
   public :: fcudaDeviceSetLimit
+  public :: fcudaDeviceSetCacheConfig
 
   public :: fcudaMalloc
   public :: fcudaFree
@@ -99,6 +100,12 @@ contains
     integer, intent(out) :: ierr
     ierr = cudaDeviceSetLimit(limit, pval)
   end subroutine fcudaDeviceSetLimit
+  
+  subroutine fcudaDeviceSetCacheConfig(cache_config, ierr)
+    integer, intent(in) :: cache_config
+    integer, intent(out) :: ierr
+    ierr = cudaDeviceSetCacheConfig(cache_config)
+  end subroutine fcudaDeviceSetCacheConfig
 
   !! malloc
   subroutine fcudaMalloc(devPtr, size, ierr)
