@@ -152,7 +152,7 @@ module cuda_c_binding
       integer(c_int) :: ierr
     end function cudaDeviceSynchronize
     function cudaDeviceSetCacheConfig(cache_config) &
-        result(ierr) bind(c, name="cudaGetDeviceProperties")
+        result(ierr) bind(c, name="cudaDeviceSetCacheConfig")
       import c_int
       integer(c_int), intent(in), value :: cache_config
       integer(c_int) :: ierr
