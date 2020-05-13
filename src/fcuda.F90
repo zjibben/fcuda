@@ -45,6 +45,8 @@ module fcuda
       cudaHostRegisterMapped, cudaHostRegisterIoMemory
   public :: cudaLimitStackSize, cudaLimitPrintFifoSize, cudaLimitMallocHeapSize, &
       cudaLimitDevRuntimeSyncDepth, cudaLimitDevRuntimePendingLaunchCount
+  public :: cudaFuncCachePreferNone, cudaFuncCachePreferShared, cudaFuncCachePreferL1, &
+      cudaFuncCachePreferEqual
 
 contains
 
